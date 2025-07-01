@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Speech to Text (Whisper API)</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+    h2 {
+      text-align: center;
+    }
+    input[type="file"] {
+      display: block;
+      margin: 20px auto;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 15px;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎤 Whisper Speech-to-Text</h2>
+  <input type="file" id="fileInput" accept="video/*,audio/*">
+  <button onclick="upload()">Transcribe</button>
+  <div id="result"></div>
+
+  <script>
+    async function upload() {
+      const fileInput = document.getElementById('fileInput');
+      if (!fileInput.files[0]) {
+        alert("Please select a file");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+
+      const res = await fetch("https://your-api.onrender.com/transcribe", {
+        method: "POST",
+        headers: {
+          "Authorization": "rishaply123"
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+      if (data.error) {
+        document.getElementById("result").innerHTML = "❌ " + data.error;
+      } else {
+        document.getElementById("result").innerHTML = `
+          ✅ <strong>Transcript:</strong><br>
+          <a href="https://your-api.onrender.com${data.text}" target="_blank">Download .txt</a><br><br>
+          📝 <strong>Subtitles:</strong><br>
+          <a href="https://your-api.onrender.com${data.vtt}" target="_blank">Download .vtt</a>
+        `;
+      }
+    }
+  </script>
+</body>
+  </html>
+  
